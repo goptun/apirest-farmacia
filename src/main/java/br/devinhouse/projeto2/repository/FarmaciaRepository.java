@@ -6,5 +6,7 @@ import java.util.Optional;
 
 public interface FarmaciaRepository extends JpaRepository<Farmacia, Long> {
     Optional<Farmacia> findByCnpj(Long cnpj);
+
+
 }
 

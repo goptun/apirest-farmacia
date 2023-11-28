@@ -1,5 +1,6 @@
 package br.devinhouse.projeto2.dto;
 
+import br.devinhouse.projeto2.model.Endereco;
 import br.devinhouse.projeto2.model.Farmacia;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public class FarmaciaDTO {
 
     public FarmaciaDTO() {
 
+    }
+
+    public FarmaciaDTO(Long cnpj, String razaoSocial, String nomeFantasia, String email, String telefone, String celular, Endereco endereco) {
     }
 
     public Long getCnpj() {
