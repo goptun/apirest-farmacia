@@ -19,6 +19,20 @@ public class Medicamento {
     @Column(name = "tipo_medicamento")
     private TipoMedicamento tipo;
 
+    public Medicamento() {
+        // Construtor padrão vazio necessário para JPA
+    }
+
+    public Medicamento(Integer nroRegistro, String nome, String laboratorio, String dosagem, String descricao, Float preco, TipoMedicamento tipo) {
+        this.nroRegistro = nroRegistro;
+        this.nome = nome;
+        this.laboratorio = laboratorio;
+        this.dosagem = dosagem;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.tipo = tipo;
+    }
+
     public Integer getNroRegistro() {
         return nroRegistro;
     }

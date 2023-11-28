@@ -4,15 +4,20 @@ package br.devinhouse.projeto2.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+// Classe representativa da PK de Estoque
 public class IdEstoque implements Serializable {
     private Long cnpj;
     private Integer nroRegistro;
 
+    public IdEstoque() {
+        // Construtor padrão vazio necessário para JPA
+    }
 
     public IdEstoque(Long cnpj, Integer nroRegistro) {
         this.cnpj = cnpj;
         this.nroRegistro = nroRegistro;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -26,6 +31,7 @@ public class IdEstoque implements Serializable {
     public int hashCode() {
         return Objects.hash(cnpj, nroRegistro);
     }
+
 
     public Long getCnpj() {
         return cnpj;

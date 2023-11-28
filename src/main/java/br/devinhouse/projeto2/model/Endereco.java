@@ -14,6 +14,22 @@ public class Endereco {
     private Double latitude;
     private Double longitude;
 
+    public Endereco() {
+      
+    }
+
+    public Endereco(long cep, String logradouro, int numero, String bairro, String cidade, String estado,
+                    Double latitude, Double longitude) {
+        this.cep = cep;
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public Long getCep() {
         return cep;
     }
@@ -86,4 +102,3 @@ public class Endereco {
         this.longitude = longitude;
     }
 }
-

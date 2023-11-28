@@ -18,6 +18,19 @@ public class Farmacia {
     @Embedded
     private Endereco endereco;
 
+    public Farmacia() {
+    }
+
+    public Farmacia(Long cnpj, String razaoSocial, String nomeFantasia, String email, String telefone, String celular, Endereco endereco) {
+        this.cnpj = cnpj;
+        this.razaoSocial = razaoSocial;
+        this.nomeFantasia = nomeFantasia;
+        this.email = email;
+        this.telefone = telefone;
+        this.celular = celular;
+        this.endereco = endereco;
+    }
+
     public Long getCnpj() {
         return cnpj;
     }

@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @IdClass(IdEstoque.class)
 public class Estoque {
     @Id
-    @Column(name = "cnpj")
     private Long cnpj;
     @Id
     @Column(name = "nro_registro")
@@ -17,6 +16,17 @@ public class Estoque {
     private Integer quantidade;
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
+
+    public Estoque() {
+        // Construtor padrão vazio necessário para JPA
+    }
+
+    public Estoque(Long cnpj, Integer nroRegistro, Integer quantidade, LocalDateTime dataAtualizacao) {
+        this.cnpj = cnpj;
+        this.nroRegistro = nroRegistro;
+        this.quantidade = quantidade;
+        this.dataAtualizacao = dataAtualizacao;
+    }
 
     public Long getCnpj() {
         return cnpj;

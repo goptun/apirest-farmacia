@@ -1,4 +1,4 @@
-package br.devinhouse.projeto2.model.repository;
+package br.devinhouse.projeto2.repository;
 
 import br.devinhouse.projeto2.model.Medicamento;
 import org.springframework.data.jpa.repository.JpaRepository;
