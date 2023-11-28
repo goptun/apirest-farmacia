@@ -2,9 +2,9 @@ package br.devinhouse.projeto2.repository;
 
 import br.devinhouse.projeto2.model.Estoque;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
+
+import java.util.List;
 
 public interface EstoqueRepository extends JpaRepository<Estoque, Long> {
-    Optional<Estoque> findByCnpjAndNroRegistro(Long cnpjFarmacia, Integer nroRegistro);
+    List<Estoque> findByCnpj(Long cnpj);
 }
-
