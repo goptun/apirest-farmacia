@@ -6,5 +6,7 @@ import java.util.Optional;
 
 public interface MedicamentoRepository extends JpaRepository<Medicamento, Long> {
     Optional<Medicamento> findByNroRegistro(Integer nroRegistro);
+
+    boolean existsByNroRegistro(Integer nroRegistro);
 }
 
