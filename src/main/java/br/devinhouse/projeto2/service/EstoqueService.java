@@ -22,17 +22,7 @@ public class EstoqueService {
         }
 
 
-        if (!farmaciaExiste(cnpj)) {
-            throw new IllegalArgumentException("Farmácia com CNPJ " + cnpj + " não encontrada.");
-        }
-
-
-        if (!medicamentoExiste(nroRegistro)) {
-            throw new IllegalArgumentException("Medicamento com Nro de Registro " + nroRegistro + " não encontrado.");
-        }
-
         Optional<Estoque> estoqueExistente = estoqueRepository.findByCnpjAndNroRegistro(cnpj, nroRegistro);
-
 
         if (estoqueExistente.isEmpty()) {
             Estoque novoEstoque = new Estoque(cnpj, nroRegistro, quantidade, LocalDateTime.now());
@@ -46,16 +36,45 @@ public class EstoqueService {
         }
     }
 
-    private boolean farmaciaExiste(Long cnpj) {
+    public Optional<Estoque> venderMedicamento(Long cnpj, Integer nroRegistro, Integer quantidade) {
 
-        return true;
-    }
+        if (quantidade <= 0) {
+            throw new IllegalArgumentException("A quantidade deve ser um número positivo maior que zero.");
+        }
 
-    private boolean medicamentoExiste(Integer nroRegistro) {
-        return true;
+
+        Optional<Estoque> estoqueExistente = estoqueRepository.findByCnpjAndNroRegistro(cnpj, nroRegistro);
+
+        if (estoqueExistente.isEmpty()) {
+            throw new IllegalArgumentException("Registro de estoque não encontrado para o CNPJ e Nro de Registro informados.");
+        }
+
+        Estoque estoqueAtualizado = estoqueExistente.get();
+
+        if (quantidade > estoqueAtualizado.getQuantidade()) {
+            throw new IllegalArgumentException("Quantidade vendida maior que a quantidade em estoque.");
+        }
+
+        estoqueAtualizado.setQuantidade(estoqueAtualizado.getQuantidade() - quantidade);
+        estoqueAtualizado.setDataAtualizacao(LocalDateTime.now());
+
+        if (estoqueAtualizado.getQuantidade() == 0) {
+            estoqueRepository.delete(estoqueAtualizado);
+        } else {
+            estoqueRepository.save(estoqueAtualizado);
+        }
+
+        return Optional.of(estoqueAtualizado);
     }
 
     public List<Estoque> consultarEstoque(Long cnpj) {
-        return null;
+
+        List<Estoque> estoqueFarmacia = estoqueRepository.findByCnpj(cnpj);
+
+        if (estoqueFarmacia.isEmpty()) {
+            throw new IllegalArgumentException("Nenhum registro de estoque encontrado para o CNPJ informado.");
+        }
+
+        return estoqueFarmacia;
     }
 }

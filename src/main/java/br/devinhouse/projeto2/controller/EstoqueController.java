@@ -41,11 +41,27 @@ public class EstoqueController {
         }
     }
 
+    @DeleteMapping
+    public ResponseEntity<Object> venderMedicamento(@RequestBody EstoqueRequest request) {
+        try {
+            Optional<Estoque> estoqueAtualizado = estoqueService.venderMedicamento(
+                    request.getCnpj(), request.getNroRegistro(), request.getQuantidade());
+
+            return estoqueAtualizado.map(est -> new ResponseEntity<>((Object) est, HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>("Operação falhou", HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     // Inner class para representar o corpo da requisição
     public static class EstoqueRequest {
         private Long cnpj;
         private Integer nroRegistro;
         private Integer quantidade;
+
+        public EstoqueRequest() {
+        }
 
         public EstoqueRequest(Long cnpj, Integer nroRegistro, Integer quantidade) {
             this.cnpj = cnpj;
