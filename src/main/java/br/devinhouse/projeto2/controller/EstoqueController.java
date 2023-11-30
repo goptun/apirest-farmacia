@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -33,9 +32,7 @@ public class EstoqueController {
     @GetMapping("/{cnpj}")
     public ResponseEntity<Object> consultarEstoque(@PathVariable Long cnpj) {
         try {
-            List<Estoque> estoqueFarmacia = estoqueService.consultarEstoque(cnpj);
-
-            return new ResponseEntity<>((Object) estoqueFarmacia, HttpStatus.OK);
+            return new ResponseEntity<>((Object) estoqueService.consultarEstoque(cnpj), HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -54,27 +51,42 @@ public class EstoqueController {
         }
     }
 
-    // Inner class para representar o corpo da requisição
-    public static class EstoqueRequest {
-        private Long cnpj;
+    @PutMapping
+    public ResponseEntity<Object> trocarMedicamento(@RequestBody TrocaMedicamentoRequest request) {
+        try {
+            Optional<TrocaMedicamentoResponse> estoquesAtualizados = estoqueService.trocarMedicamento(
+                    request.getCnpjOrigem(), request.getCnpjDestino(), request.getNroRegistro(), request.getQuantidade());
+
+            return estoquesAtualizados.map(est -> new ResponseEntity<>((Object) est, HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>("Operação falhou", HttpStatus.INTERNAL_SERVER_ERROR));
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // Inner class para representar o corpo da requisição de troca de medicamento
+    public static class TrocaMedicamentoRequest {
+        private Long cnpjOrigem;
+        private Long cnpjDestino;
         private Integer nroRegistro;
         private Integer quantidade;
 
-        public EstoqueRequest() {
+        // Getters e Setters
+
+        public Long getCnpjOrigem() {
+            return cnpjOrigem;
         }
 
-        public EstoqueRequest(Long cnpj, Integer nroRegistro, Integer quantidade) {
-            this.cnpj = cnpj;
-            this.nroRegistro = nroRegistro;
-            this.quantidade = quantidade;
+        public void setCnpjOrigem(Long cnpjOrigem) {
+            this.cnpjOrigem = cnpjOrigem;
         }
 
-        public Long getCnpj() {
-            return cnpj;
+        public Long getCnpjDestino() {
+            return cnpjDestino;
         }
 
-        public void setCnpj(Long cnpj) {
-            this.cnpj = cnpj;
+        public void setCnpjDestino(Long cnpjDestino) {
+            this.cnpjDestino = cnpjDestino;
         }
 
         public Integer getNroRegistro() {
@@ -91,6 +103,65 @@ public class EstoqueController {
 
         public void setQuantidade(Integer quantidade) {
             this.quantidade = quantidade;
+        }
+    }
+
+    // Inner class para representar o corpo da resposta de troca de medicamento
+    public static class TrocaMedicamentoResponse {
+        private Integer nroRegistro;
+        private Long cnpjOrigem;
+        private Integer quantidadeOrigem;
+        private Long cnpjDestino;
+        private Integer quantidadeDestino;
+
+        public TrocaMedicamentoResponse(Integer nroRegistro, Long cnpjOrigem, Integer quantidadeOrigem, Long cnpjDestino, Integer quantidadeDestino) {
+            this.nroRegistro = nroRegistro;
+            this.cnpjOrigem = cnpjOrigem;
+            this.quantidadeOrigem = quantidadeOrigem;
+            this.cnpjDestino = cnpjDestino;
+            this.quantidadeDestino = quantidadeDestino;
+        }
+
+        // Getters e Setters
+
+        public Integer getNroRegistro() {
+            return nroRegistro;
+        }
+
+        public void setNroRegistro(Integer nroRegistro) {
+            this.nroRegistro = nroRegistro;
+        }
+
+        public Long getCnpjOrigem() {
+            return cnpjOrigem;
+        }
+
+        public void setCnpjOrigem(Long cnpjOrigem) {
+            this.cnpjOrigem = cnpjOrigem;
+        }
+
+        public Integer getQuantidadeOrigem() {
+            return quantidadeOrigem;
+        }
+
+        public void setQuantidadeOrigem(Integer quantidadeOrigem) {
+            this.quantidadeOrigem = quantidadeOrigem;
+        }
+
+        public Long getCnpjDestino() {
+            return cnpjDestino;
+        }
+
+        public void setCnpjDestino(Long cnpjDestino) {
+            this.cnpjDestino = cnpjDestino;
+        }
+
+        public Integer getQuantidadeDestino() {
+            return quantidadeDestino;
+        }
+
+        public void setQuantidadeDestino(Integer quantidadeDestino) {
+            this.quantidadeDestino = quantidadeDestino;
         }
     }
 }
