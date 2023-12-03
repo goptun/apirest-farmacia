@@ -1,22 +1,37 @@
 package br.devinhouse.projeto2.dto;
 
-import br.devinhouse.projeto2.model.Endereco;
 import br.devinhouse.projeto2.model.Farmacia;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class FarmaciaDTO {
 
+    @JsonProperty("cnpj")
     private Long cnpj;
+
+    @JsonProperty("razaoSocial")
     private String razaoSocial;
+
+    @JsonProperty("nomeFantasia")
     private String nomeFantasia;
+
+    @JsonProperty("email")
     private String email;
+
+    @JsonProperty("telefone")
     private String telefone;
+
+    @JsonProperty("celular")
     private String celular;
+
+    @JsonProperty("endereco")
     private EnderecoDTO endereco;
 
+    public FarmaciaDTO() {}
 
-    public FarmaciaDTO(Long cnpj, String razaoSocial, String nomeFantasia, String email, String telefone, String celular, EnderecoDTO endereco) {
+    public FarmaciaDTO(Long cnpj, String razaoSocial, String nomeFantasia, String email, String telefone,
+                       String celular, EnderecoDTO endereco) {
         this.cnpj = cnpj;
         this.razaoSocial = razaoSocial;
         this.nomeFantasia = nomeFantasia;
@@ -24,13 +39,6 @@ public class FarmaciaDTO {
         this.telefone = telefone;
         this.celular = celular;
         this.endereco = endereco;
-    }
-
-    public FarmaciaDTO() {
-
-    }
-
-    public FarmaciaDTO(Long cnpj, String razaoSocial, String nomeFantasia, String email, String telefone, String celular, Endereco endereco) {
     }
 
     public Long getCnpj() {
@@ -90,19 +98,18 @@ public class FarmaciaDTO {
     }
 
     public static FarmaciaDTO converterParaDTO(Farmacia farmacia) {
-        FarmaciaDTO farmaciaDTO = new FarmaciaDTO();
-        farmaciaDTO.setCnpj(farmacia.getCnpj());
-        farmaciaDTO.setRazaoSocial(farmacia.getRazaoSocial());
-        farmaciaDTO.setNomeFantasia(farmacia.getNomeFantasia());
-        farmaciaDTO.setEmail(farmacia.getEmail());
-        farmaciaDTO.setTelefone(farmacia.getTelefone());
-        farmaciaDTO.setCelular(farmacia.getCelular());
-        farmaciaDTO.setEndereco(EnderecoDTO.converterParaDTO(farmacia.getEndereco()));
-        return farmaciaDTO;
+        return new FarmaciaDTO(
+                farmacia.getCnpj(),
+                farmacia.getRazaoSocial(),
+                farmacia.getNomeFantasia(),
+                farmacia.getEmail(),
+                farmacia.getTelefone(),
+                farmacia.getCelular(),
+                EnderecoDTO.converterParaDTO(farmacia.getEndereco())
+        );
     }
 
     public static List<FarmaciaDTO> converterListaParaDTO(List<Farmacia> farmacias) {
         return farmacias.stream().map(FarmaciaDTO::converterParaDTO).toList();
     }
 }
-

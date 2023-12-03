@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/farmacias")
@@ -24,7 +24,7 @@ public class FarmaciaController {
     @GetMapping
     public ResponseEntity<List<FarmaciaDTO>> listarFarmacias() {
         List<Farmacia> farmacias = farmaciaRepository.findAll();
-        List<FarmaciaDTO> farmaciasDTO = convertToDTO(farmacias);
+        List<FarmaciaDTO> farmaciasDTO = farmacias.stream().map(FarmaciaDTO::converterParaDTO).collect(Collectors.toList());
 
         return ResponseEntity.ok(farmaciasDTO);
     }
@@ -35,39 +35,11 @@ public class FarmaciaController {
 
         if (farmaciaOptional.isPresent()) {
             Farmacia farmacia = farmaciaOptional.get();
-            FarmaciaDTO farmaciaDTO = new FarmaciaDTO(
-                    farmacia.getCnpj(),
-                    farmacia.getRazaoSocial(),
-                    farmacia.getNomeFantasia(),
-                    farmacia.getEmail(),
-                    farmacia.getTelefone(),
-                    farmacia.getCelular(),
-                    farmacia.getEndereco()
-            );
+            FarmaciaDTO farmaciaDTO = FarmaciaDTO.converterParaDTO(farmacia);
 
             return ResponseEntity.ok(farmaciaDTO);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-
-    private List<FarmaciaDTO> convertToDTO(List<Farmacia> farmacias) {
-        List<FarmaciaDTO> farmaciasDTO = new ArrayList<>();
-
-        for (Farmacia farmacia : farmacias) {
-            farmaciasDTO.add(new FarmaciaDTO(
-                    farmacia.getCnpj(),
-                    farmacia.getRazaoSocial(),
-                    farmacia.getNomeFantasia(),
-                    farmacia.getEmail(),
-                    farmacia.getTelefone(),
-                    farmacia.getCelular(),
-                    farmacia.getEndereco()
-            ));
-        }
-
-        return farmaciasDTO;
-    }
 }
-
-
