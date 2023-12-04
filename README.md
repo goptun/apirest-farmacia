@@ -25,6 +25,9 @@ A estrutura do projeto segue o padrão MVC (Model-View-Controller), onde:
 
 1. **Configuração do Banco de Dados:**
    - Configure as propriedades do banco de dados no arquivo `application.properties` do projeto Spring Boot.
+     ```
+spring.datasource.url=jdbc:postgresql://localhost:5433/farmaciadb
+	```
 
 2. **Carga Inicial:**
    - Execute a classe `InicializacaoController` para popular o banco de dados com dados iniciais.
