@@ -4,6 +4,7 @@ import br.devinhouse.projeto2.dto.FarmaciaDTO;
 import br.devinhouse.projeto2.model.Farmacia;
 import br.devinhouse.projeto2.repository.FarmaciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +31,7 @@ public class FarmaciaController {
     }
 
     @GetMapping("/{cnpj}")
-    public ResponseEntity<FarmaciaDTO> consultarFarmaciaPorCnpj(@PathVariable Long cnpj) {
+    public ResponseEntity<?> consultarFarmaciaPorCnpj(@PathVariable Long cnpj) {
         Optional<Farmacia> farmaciaOptional = farmaciaRepository.findById(cnpj);
 
         if (farmaciaOptional.isPresent()) {
@@ -39,7 +40,10 @@ public class FarmaciaController {
 
             return ResponseEntity.ok(farmaciaDTO);
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Nenhuma farmácia encontrada para o CNPJ informado: " + cnpj);
         }
     }
+
 }
