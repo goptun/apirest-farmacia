@@ -1,6 +1,8 @@
 package br.devinhouse.projeto2.controller;
 
 import br.devinhouse.projeto2.model.Estoque;
+import br.devinhouse.projeto2.repository.FarmaciaRepository;
+import br.devinhouse.projeto2.repository.MedicamentoRepository;
 import br.devinhouse.projeto2.service.EstoqueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +18,19 @@ public class EstoqueController {
     @Autowired
     private EstoqueService estoqueService;
 
+    @Autowired
+    private FarmaciaRepository farmaciaRepository;
+
+    @Autowired
+    private MedicamentoRepository medicamentoRepository;
+
     @PostMapping
     public ResponseEntity<Object> adquirirMedicamento(@RequestBody EstoqueRequest request) {
         try {
+            if (verificarExistenciaFarmacia(request.getCnpj()) || verificarExistenciaMedicamento(request.getNroRegistro())) {
+                return new ResponseEntity<>("CNPJ ou número de registro não encontrados", HttpStatus.BAD_REQUEST);
+            }
+
             Optional<Estoque> estoqueAtualizado = estoqueService.adquirirMedicamento(
                     request.getCnpj(), request.getNroRegistro(), request.getQuantidade());
 
@@ -29,18 +41,13 @@ public class EstoqueController {
         }
     }
 
-    @GetMapping("/{cnpj}")
-    public ResponseEntity<Object> consultarEstoque(@PathVariable Long cnpj) {
-        try {
-            return new ResponseEntity<>((Object) estoqueService.consultarEstoque(cnpj), HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @DeleteMapping
     public ResponseEntity<Object> venderMedicamento(@RequestBody EstoqueRequest request) {
         try {
+            if (verificarExistenciaFarmacia(request.getCnpj()) || verificarExistenciaMedicamento(request.getNroRegistro())) {
+                return new ResponseEntity<>("CNPJ ou número de registro não encontrados", HttpStatus.BAD_REQUEST);
+            }
+
             Optional<Estoque> estoqueAtualizado = estoqueService.venderMedicamento(
                     request.getCnpj(), request.getNroRegistro(), request.getQuantidade());
 
@@ -54,6 +61,12 @@ public class EstoqueController {
     @PutMapping
     public ResponseEntity<Object> trocarMedicamento(@RequestBody TrocaMedicamentoRequest request) {
         try {
+            if (verificarExistenciaFarmacia(request.getCnpjOrigem()) ||
+                    verificarExistenciaFarmacia(request.getCnpjDestino()) ||
+                    verificarExistenciaMedicamento(request.getNroRegistro())) {
+                return new ResponseEntity<>("CNPJ ou número de registro não encontrados", HttpStatus.BAD_REQUEST);
+            }
+
             Optional<TrocaMedicamentoResponse> estoquesAtualizados = estoqueService.trocarMedicamento(
                     request.getCnpjOrigem(), request.getCnpjDestino(), request.getNroRegistro(), request.getQuantidade());
 
@@ -64,14 +77,20 @@ public class EstoqueController {
         }
     }
 
-    // Inner class para representar o corpo da requisição de troca de medicamento
+    private boolean verificarExistenciaFarmacia(Long cnpj) {
+        return farmaciaRepository.findByCnpj(cnpj).isEmpty();
+    }
+
+    private boolean verificarExistenciaMedicamento(Integer nroRegistro) {
+        return medicamentoRepository.findByNroRegistro(nroRegistro).isEmpty();
+    }
+
     public static class TrocaMedicamentoRequest {
         private Long cnpjOrigem;
         private Long cnpjDestino;
         private Integer nroRegistro;
         private Integer quantidade;
 
-        // Getters e Setters
 
         public Long getCnpjOrigem() {
             return cnpjOrigem;
@@ -106,7 +125,6 @@ public class EstoqueController {
         }
     }
 
-    // Inner class para representar o corpo da resposta de troca de medicamento
     public static class TrocaMedicamentoResponse {
         private Integer nroRegistro;
         private Long cnpjOrigem;
@@ -122,7 +140,6 @@ public class EstoqueController {
             this.quantidadeDestino = quantidadeDestino;
         }
 
-        // Getters e Setters
 
         public Integer getNroRegistro() {
             return nroRegistro;
