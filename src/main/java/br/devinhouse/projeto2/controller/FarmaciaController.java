@@ -45,5 +45,4 @@ public class FarmaciaController {
                     .body("Nenhuma farmácia encontrada para o CNPJ informado: " + cnpj);
         }
     }
-
 }

@@ -96,4 +96,3 @@ public class InicializacaoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
-

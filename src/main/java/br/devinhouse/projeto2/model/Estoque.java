@@ -18,7 +18,7 @@ public class Estoque {
     private LocalDateTime dataAtualizacao;
 
     public Estoque() {
-        // Construtor padrão vazio necessário para JPA
+
     }
 
     public Estoque(Long cnpj, Integer nroRegistro, Integer quantidade, LocalDateTime dataAtualizacao) {

@@ -5,14 +5,11 @@ public class EstoqueRequest {
     private Integer nroRegistro;
     private Integer quantidade;
 
-    // Construtor
     public EstoqueRequest(Long cnpj, Integer nroRegistro, Integer quantidade) {
         this.cnpj = cnpj;
         this.nroRegistro = nroRegistro;
         this.quantidade = quantidade;
     }
-
-    // Getters e Setters
 
     public Long getCnpj() {
         return cnpj;

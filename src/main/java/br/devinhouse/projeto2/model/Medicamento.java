@@ -20,7 +20,7 @@ public class Medicamento {
     private TipoMedicamento tipo;
 
     public Medicamento() {
-        // Construtor padrão vazio necessário para JPA
+
     }
 
     public Medicamento(Integer nroRegistro, String nome, String laboratorio, String dosagem, String descricao, Float preco, TipoMedicamento tipo) {
