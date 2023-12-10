@@ -142,3 +142,7 @@ A estrutura do projeto segue o padrão MVC (Model-View-Controller), onde:
 - Implementação de uma interface gráfica para interação do usuário.
 - Adição de funcionalidades avançadas, como controle de validade de medicamentos, relatórios detalhados, etc.
 - Melhorias de desempenho e segurança.
+
+## Link do vídeo de apresentação
+
+[Vídeo](https://drive.google.com/file/d/1Gw785Tzngb-IXQLgCmHL1L8DmFOL7QEP/view?usp=sharing)
